@@ -1,0 +1,10 @@
+<h2>利用履歴</h2>
+
+<ul>
+  {% for r in rentals %}
+    <li>
+      {{ r.start }} ～ {{ r.end }}
+      {{ r.minutes }}分 / {{ r.price }}円
+    </li>
+  {% endfor %}
+</ul>

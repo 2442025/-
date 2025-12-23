@@ -1,0 +1,10 @@
+<h2>スタンド一覧</h2>
+
+<ul>
+  {% for s in stations %}
+    <li>
+      {{ s.name }}（{{ s.available }}台）
+      <a href="/stations/{{ s.id }}">詳細</a>
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,10 @@
+<h2>返却</h2>
+
+<form method="post">
+  <select name="station_id">
+    {% for s in stations %}
+      <option value="{{ s.id }}">{{ s.name }}</option>
+    {% endfor %}
+  </select>
+  <button>返却</button>
+</form>
