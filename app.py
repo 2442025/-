@@ -14,6 +14,8 @@ from variables import JWT_SECRET_KEY, PRICE_PER_MINUTE_CENTS, RENTAL_DEPOSIT_CEN
 from sqlalchemy import select, func
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
+from flask import render_template
+
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
@@ -215,12 +217,6 @@ def my_rentals():
     finally:
         session.close()
 
-if __name__ == "__main__":
-    # Flask の起動用（開発用）
-    app.run(debug=True, host="0.0.0.0", port=5000)
-
-from flask import render_template
-
 @app.route("/")
 def login_page():
     return render_template("login.html")
@@ -240,3 +236,8 @@ def history_page():
     rentals = Rental.query.all()
     return render_template("history.html", rentals=rentals)
 
+if __name__ == "__main__":
+    # Flask の起動用（開発用）
+    app.run(debug=True, host="0.0.0.0", port=5000)
+
+from flask import render_template
