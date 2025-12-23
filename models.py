@@ -38,7 +38,7 @@ class Battery(Base):
     station_id = Column(Integer, ForeignKey("stations.id"), nullable=True)
     available = Column(Boolean, default=True, nullable=False)
     battery_level = Column(Integer, default=100, nullable=False)  # 0-100
-    metadata = Column(Text, nullable=True)
+    extra_info = Column(Text, nullable=True)
 
     station = relationship("Station", back_populates="batteries")
     rentals = relationship("Rental", back_populates="battery")
