@@ -1,0 +1,9 @@
+Flask>=2.0
+Flask-JWT-Extended>=4.4
+Flask-SQLAlchemy>=2.5
+SQLAlchemy>=1.4
+python-dotenv
+passlib[bcrypt]
+psycopg2-binary  # PostgreSQL を使う場合
+pytest
+requests
