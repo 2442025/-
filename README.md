@@ -55,3 +55,39 @@ Web3層構造を用いたモバイルバッテリー貸し出しシステムの
 利用日時
 利用時間
 料金
+
+##  ER図
+erDiagram
+    USERS ||--o{ RENTALS : rents
+    BATTERIES ||--o{ RENTALS : used_in
+    STATIONS ||--o{ BATTERIES : owns
+
+    USERS {
+        int id PK
+        string email
+        string password
+        int balance
+        datetime created_at
+    }
+
+    STATIONS {
+        int id PK
+        string name
+        string location
+    }
+
+    BATTERIES {
+        int id PK
+        int station_id FK
+        string status
+    }
+
+    RENTALS {
+        int id PK
+        int user_id FK
+        int battery_id FK
+        datetime rent_time
+        datetime return_time
+        int fee
+    }
+
