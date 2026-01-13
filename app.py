@@ -51,6 +51,14 @@ app.config["DEBUG"] = DEBUG_MODE
 
 jwt = JWTManager(app)
 
+@app.context_processor
+def inject_template_globals():
+    return {
+        "PRICE_PER_MINUTE_CENTS": PRICE_PER_MINUTE_CENTS,
+        "RENTAL_DEPOSIT_CENTS": RENTAL_DEPOSIT_CENTS,
+        "INITIAL_BALANCE_CENTS": INITIAL_BALANCE_CENTS
+    }
+
 # ロギング設定
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
