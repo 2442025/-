@@ -392,7 +392,14 @@ def charge_page():
         return redirect(url_for("login_page"))
 
     if request.method == "POST":
-        amount = int(request.form.get("amount", 0))
+        # フォーム入力を安全にパース
+        amount_str = (request.form.get("amount") or "").strip()
+        try:
+            amount = int(amount_str)
+        except (ValueError, TypeError):
+            flash("有効な金額を入力してください", "error")
+            return redirect(url_for("charge_page"))
+
         if amount <= 0:
             flash("有効な金額を入力してください", "error")
             return redirect(url_for("charge_page"))
@@ -401,6 +408,12 @@ def charge_page():
             with get_session_context() as session:
                 with session.begin():
                     user = session.get(User, user_id)
+                    if not user:
+                        # 想定外（セッションに user_id があるが DB にユーザーがない）
+                        raise RuntimeError("ユーザーが見つかりません")
+
+                    # 単位に注意: 変数名に _CENTS がついていてもテンプレートは「円」を表示しています。
+                    # このアプリでは amount をそのまま balance_cents に足す実装になっています。
                     user.balance_cents += amount
 
                     # チャージ履歴を作成（INSERT）
@@ -412,12 +425,16 @@ def charge_page():
                     )
                     session.add(rental)
 
-            flash(f"{amount}円をチャー��しました", "success")
+            flash(f"{amount}円をチャージしました", "success")
             return redirect(url_for("home_page"))
 
         except Exception as e:
-            logger.error(f"Charge failed for user {user_id}: {e}")
-            flash("チャージに失敗しました", "error")
+            # トレースをログに残す（Render のログで確認可能）
+            logger.exception(f"Charge failed for user {user_id}: {e}")
+            if DEBUG_MODE:
+                flash(f"チャージに失敗しました: {e}", "error")
+            else:
+                flash("チャージに失敗しました", "error")
             return redirect(url_for("charge_page"))
 
     balance = get_user_balance(user_id)
