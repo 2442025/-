@@ -128,7 +128,7 @@ class Rental(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     # 外部キー（ユーザー・バッテリー）
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     battery_id = Column(Integer, ForeignKey("batteries.id"), nullable=True, index=True)
     
     # 時刻管理
