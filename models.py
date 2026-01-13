@@ -129,7 +129,7 @@ class Rental(Base):
     
     # 外部キー（ユーザー・バッテリー）
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
-    battery_id = Column(Integer, ForeignKey("batteries.id"), nullable=False, index=True)
+    battery_id = Column(Integer, ForeignKey("batteries.id"), nullable=True, index=True)
     
     # 時刻管理
     start_at = Column(DateTime(timezone=True), server_default=func.now())
