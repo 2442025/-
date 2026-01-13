@@ -685,12 +685,6 @@ def internal_error(error):
 # ====================
 # 起動
 # ====================
-if __name__ == "__main__":
-    # デバッグモードの場合はログを詳細に
-    if DEBUG_MODE:
-        app.logger.setLevel(logging.DEBUG)
-    
-    app.run(debug=DEBUG_MODE, host="0.0.0.0", port=5000)
 
 # ====== 一時管理ルート（デバッグ・マイグレーション用） ======
 # 注意: セキュリティのため実行後すぐにこのコードを削除してください。
@@ -827,3 +821,11 @@ def admin_migrate_rentals_nullable():
         shutil.copyfile(bak, db_path)
         return f"Migration failed and DB restored from backup. Error: {e}", 500
 # ====== 管理ルートここまで ======
+
+if __name__ == "__main__":
+    # デバッグモードの場合はログを詳細に
+    if DEBUG_MODE:
+        app.logger.setLevel(logging.DEBUG)
+    
+    app.run(debug=DEBUG_MODE, host="0.0.0.0", port=5000)
+
