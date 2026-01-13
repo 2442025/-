@@ -1,15 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>ログイン</title>
-</head>
-<body>
-  <h2>ログイン</h2>
-  <form method="post">
-    <input name="email" placeholder="メールアドレス"><br>
-    <input name="password" type="password" placeholder="パスワード"><br>
-    <button>ログイン</button>
-  </form>
-  <a href="/register">新規登録</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px; text-align: center;">🔐 ログイン</h2>
+    
+    <form method="post" action="/login">
+        <div class="form-group">
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">パスワード</label>
+            <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
+        </div>
+        
+        <button type="submit" class="btn btn-block">ログイン</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <p>初めてご利用ですか？</p>
+        <a href="/register" class="btn btn-secondary">新規登録</a>
+    </div>
+</div>
+{% endblock %}

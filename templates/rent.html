@@ -1,8 +1,71 @@
-<h2>貸出確認</h2>
+{% extends "base.html" %}
 
-<p>バッテリーID：{{ battery.id }}</p>
-<p>料金目安：{{ price }} 円</p>
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">✅ 貸出確認</h2>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="margin-bottom: 15px; color: #333;">バッテリー情報</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <strong>バッテリーID:</strong><br>
+                <span style="color: #666;">{{ battery.id }}</span>
+            </div>
+            <div>
+                <strong>シリアル番号:</strong><br>
+                <span style="color: #666;">{{ battery.serial }}</span>
+            </div>
+            <div>
+                <strong>残量:</strong><br>
+                <span style="color: #666;">{{ battery.battery_level }}%</span>
+            </div>
+            <div>
+                <strong>状態:</strong><br>
+                <span style="color: #27ae60; font-weight: bold;">利用可能</span>
+            </div>
+        </div>
+    </div>
+    
+    <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="margin-bottom: 10px; color: #2e7d32;">料金情報</h4>
+        <p style="color: #2e7d32; font-weight: bold; font-size: 18px;">
+            1分 {{ PRICE_PER_MINUTE_CENTS }}円
+        </p>
+        <p style="color: #666; font-size: 14px;">
+            ※実際の料金は使用時間に応じて自動計算されます
+        </p>
+    </div>
+    
+    <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="margin-bottom: 10px; color: #ef6c00;">残高確認</h4>
+        <p style="color: #ef6c00; font-weight: bold; font-size: 18px;">
+            お持ちの残高: ¥{{ balance }}
+        </p>
+        <p style="color: #666; font-size: 14px;">
+            ※貸出には{{ RENTAL_DEPOSIT_CENTS }}円以上の残高が必要です
+        </p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 30px;">
+        <form method="post" style="display: inline;">
+            <button type="submit" class="btn btn-success" style="padding: 15px 40px; font-size: 18px;">
+                🔄 バッテリーを貸出する
+            </button>
+        </form>
+        
+        <div style="margin-top: 20px;">
+            <a href="/stations" class="btn btn-secondary">← キャンセル</a>
+        </div>
+    </div>
+</div>
 
-<form method="post">
-  <button>貸出する</button>
-</form>
+<div class="card">
+    <h3>⚠️ 貸出時の注意事項</h3>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+        <li>バッテリーは大切にお使いください</li>
+        <li>返却は任意のスタンドで可能です</li>
+        <li>使用時間に応じた料金が自動計算されます</li>
+        <li>故障や破損の場合はご連絡ください</li>
+    </ul>
+</div>
+{% endblock %}

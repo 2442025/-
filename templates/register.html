@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px; text-align: center;">📝 新規登録</h2>
+    
+    <form method="post" action="/register">
+        <div class="form-group">
+            <label for="email">メールアドレス</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">パスワード</label>
+            <input type="password" id="password" name="password" placeholder="6文字以上のパスワード" required minlength="6">
+        </div>
+        
+        <div class="form-group">
+            <label for="confirm_password">パスワード確認</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="再度パスワードを入力" required minlength="6">
+        </div>
+        
+        <button type="submit" class="btn btn-block">新規登録</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 20px;">
+        <p>既にアカウントをお持ちですか？</p>
+        <a href="/login" class="btn btn-secondary">ログイン</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,10 +1,33 @@
-<h2>スタンド一覧</h2>
+{% extends "base.html" %}
 
-<ul>
-  {% for s in stations %}
-    <li>
-      {{ s.name }}（{{ s.available }}台）
-      <a href="/stations/{{ s.id }}">詳細</a>
-    </li>
-  {% endfor %}
-</ul>
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">📍 スタンド一覧</h2>
+    
+    {% if stations %}
+        <div class="grid">
+            {% for station in stations %}
+                <div class="station-card">
+                    <div class="station-name">{{ station.name }}</div>
+                    <div class="station-location">📍 {{ station.location }}</div>
+                    <div style="margin-top: 10px;">
+                        {% if station.available_count > 0 %}
+                            <span class="available-count">{{ station.available_count }}台 利用可能</span>
+                            <a href="/stations/{{ station.id }}" class="btn" style="float: right; background-color: #27ae60;">詳細を見る</a>
+                        {% else %}
+                            <span style="color: #e74c3c; font-weight: bold;">在庫切れ</span>
+                            <button class="btn" style="float: right; background-color: #95a5a6; cursor: not-allowed;" disabled>詳細を見る</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; color: #666;">現在、登録されているスタンドがありません。</p>
+    {% endif %}
+    
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="/home" class="btn btn-secondary">← ホームに戻る</a>
+    </div>
+</div>
+{% endblock %}

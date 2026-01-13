@@ -1,10 +1,85 @@
-<h2>利用履歴</h2>
+{% extends "base.html" %}
 
-<ul>
-  {% for r in rentals %}
-    <li>
-      {{ r.start }} ～ {{ r.end }}
-      {{ r.minutes }}分 / {{ r.price }}円
-    </li>
-  {% endfor %}
-</ul>
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">📊 利用履歴</h2>
+    
+    {% if history %}
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #eee; text-align: left;">
+                        <th style="padding: 10px; font-weight: bold; color: #666;">日時</th>
+                        <th style="padding: 10px; font-weight: bold; color: #666;">バッテリー</th>
+                        <th style="padding: 10px; font-weight: bold; color: #666;">ステータス</th>
+                        <th style="padding: 10px; font-weight: bold; color: #666;">料金</th>
+                        <th style="padding: 10px; font-weight: bold; color: #666;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                        <tr style="border-bottom: 1px solid #eee; padding: 15px 0;">
+                            <td style="padding: 15px 10px;">
+                                <div style="font-weight: bold;">{{ item.start_at }}</div>
+                                {% if item.end_at != "貸出中" %}
+                                    <div style="font-size: 12px; color: #666;">{{ item.end_at }}</div>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 15px 10px;">
+                                <div style="font-weight: bold;">{{ item.battery_serial }}</div>
+                                <div style="font-size: 12px; color: #666;">{{ item.station_name }}</div>
+                            </td>
+                            <td style="padding: 15px 10px;">
+                                {% if item.status == "ongoing" %}
+                                    <span style="background: #fff3cd; color: #856404; padding: 4px 8px; border-radius: 4px; font-size: 12px;">貸出中</span>
+                                {% elif item.status == "returned" %}
+                                    <span style="background: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-size: 12px;">返却済</span>
+                                {% elif item.status == "charged" %}
+                                    <span style="background: #e3f2fd; color: #1565c0; padding: 4px 8px; border-radius: 4px; font-size: 12px;">チャージ</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 15px 10px;">
+                                {% if item.price > 0 %}
+                                    <span style="color: #e74c3c; font-weight: bold;">¥{{ item.price }}</span>
+                                {% elif item.price < 0 %}
+                                    <span style="color: #27ae60; font-weight: bold;">+¥{{ -item.price }}チャージ</span>
+                                {% else %}
+                                    <span style="color: #666;">¥0</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 15px 10px;">
+                                {% if item.status == "ongoing" %}
+                                    <a href="/return/{{ item.id }}" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">返却する</a>
+                                {% else %}
+                                    <span style="color: #666; font-size: 12px;">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 40px; color: #666;">
+            <div style="font-size: 40px; margin-bottom: 10px;">📋</div>
+            <div style="font-size: 18px; margin-bottom: 5px;">利用履歴がありません</div>
+            <div>まずはバッテリーを貸出してみましょう！</div>
+        </div>
+    {% endif %}
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="/home" class="btn btn-secondary" style="margin-right: 10px;">ホームに戻る</a>
+        <a href="/charge" class="btn btn-success">💰 残高チャージ</a>
+    </div>
+</div>
+
+<div class="card">
+    <h3>ℹ️ 履歴について</h3>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+        <li><strong>貸出中:</strong> 返却されていない利用記録</li>
+        <li><strong>返却済:</strong> 正常に返却された利用記録</li>
+        <li><strong>チャージ:</strong> 残高チャージの記録</li>
+        <li>返却済の記録は料金が確定しています</li>
+    </ul>
+</div>
+{% endblock %}

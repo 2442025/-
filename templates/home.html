@@ -1,7 +1,55 @@
-<h2>ホーム</h2>
+{% extends "base.html" %}
 
-<p>現在地スタンド：{{ station.name }}</p>
-<p>バッテリー残数：{{ station.available_count }}</p>
+{% block content %}
+<div class="balance-card">
+    <h3>ウォレット残高</h3>
+    <div class="balance-amount">¥{{ balance }}</div>
+    <p style="opacity: 0.8; font-size: 14px;">※1分10円でご利用いただけます</p>
+</div>
 
-<a href="/stations">スタンド検索</a><br>
-<a href="/history">利用履歴</a>
+<div class="card">
+    <h2 style="margin-bottom: 20px;">🔋 利用可能なスタンド</h2>
+    
+    {% if stations %}
+        <div class="grid">
+            {% for station in stations %}
+                <div class="station-card">
+                    <div class="station-name">{{ station.name }}</div>
+                    <div class="station-location">📍 {{ station.location }}</div>
+                    <div style="margin-top: 10px;">
+                        {% if station.available_count > 0 %}
+                            <span class="available-count">{{ station.available_count }}台 利用可能</span>
+                            <a href="/stations/{{ station.id }}" class="btn" style="float: right; background-color: #27ae60;">利用する</a>
+                        {% else %}
+                            <span style="color: #e74c3c; font-weight: bold;">在庫切れ</span>
+                            <button class="btn" style="float: right; background-color: #95a5a6; cursor: not-allowed;" disabled>利用不可</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; color: #666;">現在、利用可能なスタンドがありません。</p>
+    {% endif %}
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="/stations" class="btn btn-secondary" style="margin-right: 10px;">全てのスタンドを見る</a>
+        <a href="/history" class="btn" style="background-color: #9b59b6;">利用履歴</a>
+    </div>
+</div>
+
+<div class="card">
+    <h3>💡 使い方</h3>
+    <ol style="padding-left: 20px; line-height: 1.8;">
+        <li>利用可能なスタンドからバッテリーを選択</li>
+        <li>貸出をタップしてバッテリーを受け取る</li>
+        <li>使用後は任意のスタンドに返却</li>
+        <li>使用時間に応じた料金が自動計算されます</li>
+    </ol>
+    
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="/charge" class="btn btn-success">💰 残高チャージ</a>
+        <a href="/logout" class="btn btn-danger" style="margin-left: 10px;">🚪 ログアウト</a>
+    </div>
+</div>
+{% endblock %}

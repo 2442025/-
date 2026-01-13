@@ -1,10 +1,74 @@
-<h2>返却</h2>
+{% extends "base.html" %}
 
-<form method="post">
-  <select name="station_id">
-    {% for s in stations %}
-      <option value="{{ s.id }}">{{ s.name }}</option>
-    {% endfor %}
-  </select>
-  <button>返却</button>
-</form>
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">🔄 返却手続き</h2>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="margin-bottom: 15px; color: #333;">貸出情報</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <strong>バッテリーID:</strong><br>
+                <span style="color: #666;">{{ battery.id }} ({{ battery.serial }})</span>
+            </div>
+            <div>
+                <strong>貸出日時:</strong><br>
+                <span style="color: #666;">{{ rental.start_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            </div>
+            <div>
+                <strong>現在ステータス:</strong><br>
+                <span style="color: #e74c3c; font-weight: bold;">貸出中</span>
+            </div>
+            <div>
+                <strong>現在地:</strong><br>
+                <span style="color: #666;">{{ station.name if station else '不明' }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="margin-bottom: 10px; color: #ef6c00;">返却先選択</h4>
+        <p style="color: #666; margin-bottom: 15px;">
+            返却先のスタンドを選択してください。任意のスタンドに返却可能です。
+        </p>
+        
+        <form method="post">
+            <div class="form-group">
+                <label for="return_station_id">返却先スタンド</label>
+                <select id="return_station_id" name="return_station_id" required>
+                    <option value="">選択してください</option>
+                    {% for s in stations %}
+                        <option value="{{ s.id }}">{{ s.name }} - {{ s.location }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="submit" class="btn btn-success" style="padding: 15px 40px; font-size: 18px;">
+                    🔄 バッテリーを返却する
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="/history" class="btn btn-secondary">← 利用履歴に戻る</a>
+    </div>
+</div>
+
+<div class="card">
+    <h3>💡 返却について</h3>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+        <li>返却は任意のスタンドで行えます</li>
+        <li>返却時に使用料金が自動計算されます</li>
+        <li>バッテリーは充電ステーションに正しく設置してください</li>
+        <li>返却完了後、画面に料金が表示されます</li>
+    </ul>
+    
+    <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px;">
+        <h4 style="margin-bottom: 10px; color: #1565c0;">料金計算例</h4>
+        <p style="color: #1565c0; margin-bottom: 5px;">使用時間: 30分</p>
+        <p style="color: #1565c0; font-weight: bold;">料金: ¥300 (30分 × 10円)</p>
+    </div>
+</div>
+{% endblock %}

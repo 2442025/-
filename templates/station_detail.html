@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">🔋 {{ station.name }}</h2>
+    <p style="color: #666; margin-bottom: 20px;">📍 {{ station.location }}</p>
+    
+    {% if batteries %}
+        <div class="grid">
+            {% for battery in batteries %}
+                <div class="station-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 16px;">バッテリー #{{ battery.id }}</div>
+                            <div style="font-size: 12px; color: #666;">シリアル: {{ battery.serial }}</div>
+                            <div style="font-size: 12px; color: #666;">残量: {{ battery.battery_level }}%</div>
+                        </div>
+                        <div>
+                            <span class="available-count">利用可能</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; text-align: right;">
+                        <a href="/rent/{{ battery.id }}" class="btn" style="background-color: #27ae60;">貸出する</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align: center; color: #e74c3c; font-weight: bold;">このスタンドには利用可能なバッテリーがありません。</p>
+    {% endif %}
+    
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="/stations" class="btn btn-secondary">← スタンド一覧に戻る</a>
+    </div>
+</div>
+
+<div class="card">
+    <h3>⚠️ 注意事項</h3>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+        <li>貸出には{{ RENTAL_DEPOSIT_CENTS }}円以上の残高が必要です</li>
+        <li>使用料金は1分{{ PRICE_PER_MINUTE_CENTS }}円で計算されます</li>
+        <li>返却は任意のスタンドで可能です</li>
+        <li>バッテリーは大切にお使いください</li>
+    </ul>
+</div>
+{% endblock %}

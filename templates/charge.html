@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">💰 残高チャージ</h2>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="margin-bottom: 15px; color: #333;">現在の残高</h3>
+        <div class="balance-amount" style="font-size: 36px; margin-bottom: 10px;">¥{{ balance }}</div>
+        <p style="color: #666; font-size: 14px;">残高はバッテリー貸出や各種手数料の支払いに使用されます</p>
+    </div>
+    
+    <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="margin-bottom: 15px; color: #2e7d32;">チャージ金额選択</h3>
+        
+        <form method="post">
+            <div class="form-group">
+                <label for="amount">チャージ金额（円）</label>
+                <input type="number" id="amount" name="amount" placeholder="500" min="100" step="100" required>
+                <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                    ※100円単位で入力してください
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="submit" class="btn btn-success" style="padding: 15px 40px; font-size: 18px;">
+                    💳 チャージする
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="/home" class="btn btn-secondary">← ホームに戻る</a>
+    </div>
+</div>
+
+<div class="card">
+    <h3>💡 チャージについて</h3>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+        <li>最小チャージ金额は100円です</li>
+        <li>100円単位でチャージできます</li>
+        <li>チャージ後はすぐにご利用いただけます</li>
+        <li>チャージ履歴は利用履歴で確認できます</li>
+    </ul>
+    
+    <div style="margin-top: 20px; padding: 15px; background: #fff3e0; border-radius: 8px;">
+        <h4 style="margin-bottom: 10px; color: #ef6c00;">おすすめチャージ金额</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+            <div style="text-align: center; padding: 10px; border: 1px solid #eee; border-radius: 6px;">
+                <div style="font-weight: bold;">¥500</div>
+                <div style="font-size: 12px; color: #666;">約50分利用可能</div>
+            </div>
+            <div style="text-align: center; padding: 10px; border: 1px solid #eee; border-radius: 6px;">
+                <div style="font-weight: bold;">¥1,000</div>
+                <div style="font-size: 12px; color: #666;">約100分利用可能</div>
+            </div>
+            <div style="text-align: center; padding: 10px; border: 1px solid #eee; border-radius: 6px;">
+                <div style="font-weight: bold;">¥2,000</div>
+                <div style="font-size: 12px; color: #666;">約200分利用可能</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
