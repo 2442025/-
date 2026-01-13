@@ -50,6 +50,7 @@ class User(Base):
     
     # リレーション定義（1対多: User -> Rental）
     rentals = relationship("Rental", back_populates="user", lazy="dynamic")
+    charges = relationship("ChargeHistory", back_populates="user", lazy="dynamic")
 
     def __repr__(self):
         return f"<User id={self.id} email={self.email} balance={self.balance_cents}>"
@@ -128,14 +129,14 @@ class Rental(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     
     # 外部キー（ユーザー・バッテリー）
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
-    battery_id = Column(Integer, ForeignKey("batteries.id"), nullable=True, index=True)
-    
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    battery_id = Column(Integer, ForeignKey("batteries.id"), nullable=False, index=True)
+
     # 時刻管理
     start_at = Column(DateTime(timezone=True), server_default=func.now())
     end_at = Column(DateTime(timezone=True), nullable=True)
     
-    # 状態管理（ongoing: 貸出中, returned: 返却済, cancelled: キャンセル）
+    - 状態管理（ongoing: 貸出中, returned: 返却済）
     status = Column(String(30), default="ongoing", nullable=False, index=True)
     
     # 料金（返却時に計算）
@@ -147,3 +148,34 @@ class Rental(Base):
 
     def __repr__(self):
         return f"<Rental id={self.id} user={self.user_id} status={self.status}>"
+
+class ChargeHistory(Base):
+    """
+    チャージ履歴テーブル
+    - 金銭チャージのみを記録
+    - バッテリーとは無関係
+    """
+    __tablename__ = "charge_histories"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True
+    )
+
+    amount_cents = Column(Integer, nullable=False)
+
+    created_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now()
+    )
+
+    # リレーション
+    user = relationship("User", back_populates="charges")
+
+    def __repr__(self):
+        return f"<ChargeHistory id={self.id} user={self.user_id} amount={self.amount_cents}>"
+
