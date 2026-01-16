@@ -330,47 +330,48 @@ def return_page(rental_id):
         battery = session.get(Battery, rental.battery_id)
         station = session.get(Station, battery.station_id) if battery else None
 
-if request.method == "POST":
-    try:
-        with get_session_context() as session:
-            with session.begin():
-                rental = session.get(Rental, rental_id)
-                battery = session.get(Battery, rental.battery_id)
-                user = session.get(User, user_id)
+    # ここからは関数内部にあるべき処理なのでインデントを関数内に揃える
+    if request.method == "POST":
+        try:
+            with get_session_context() as session:
+                with session.begin():
+                    rental = session.get(Rental, rental_id)
+                    battery = session.get(Battery, rental.battery_id)
+                    user = session.get(User, user_id)
 
-                # 時間・料金計算
-                end_time = datetime.utcnow()
-                start_time = rental.start_at
-                minutes = max(1, int((end_time - start_time).total_seconds() // 60))
-                price = minutes * PRICE_PER_MINUTE_CENTS
+                    # 時間・料金計算
+                    end_time = datetime.utcnow()
+                    start_time = rental.start_at
+                    minutes = max(1, int((end_time - start_time).total_seconds() // 60))
+                    price = minutes * PRICE_PER_MINUTE_CENTS
 
-                # 残高チェック
-                if user.balance_cents < price:
-                    flash("残高が不足しています", "error")
-                    return redirect(url_for("charge_page"))
+                    # 残高チェック
+                    if user.balance_cents < price:
+                        flash("残高が不足しています", "error")
+                        return redirect(url_for("charge_page"))
 
-                # 返却先ステーション
-                return_station_id = request.form.get("return_station_id")
+                    # 返却先ステーション
+                    return_station_id = request.form.get("return_station_id")
 
-                # 返却処理（UPDATE）
-                user.balance_cents -= price
-                rental.end_at = end_time
-                rental.price_cents = price
-                rental.status = "returned"
+                    # 返却処理（UPDATE）
+                    user.balance_cents -= price
+                    rental.end_at = end_time
+                    rental.price_cents = price
+                    rental.status = "returned"
 
-                battery.available = True
+                    battery.available = True
 
-                # ★ ここが重要（位置更新）
-                if return_station_id:
-                    battery.station_id = int(return_station_id)
+                    # ★ ここが重要（位置更新）
+                    if return_station_id:
+                        battery.station_id = int(return_station_id)
 
-        flash(f"バッテリーを返却しました。料金: {price}円", "success")
-        return redirect(url_for("home_page"))
+            flash(f"バッテリーを返却しました。料金: {price}円", "success")
+            return redirect(url_for("home_page"))
 
-    except Exception as e:
-        logger.error(f"Return failed for rental {rental_id}: {e}")
-        flash("返却に失敗しました", "error")
-        return redirect(url_for("return_page", rental_id=rental_id))
+        except Exception as e:
+            logger.error(f"Return failed for rental {rental_id}: {e}")
+            flash("返却に失敗しました", "error")
+            return redirect(url_for("return_page", rental_id=rental_id))
 
     with get_session_context() as session:
         stations = session.query(Station).all()
