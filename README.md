@@ -1,9 +1,3 @@
-# -# モバイルバッテリー貸し出しシステム
-
-本リポジトリは、Practice #10 における
-Web3層構造を用いたモバイルバッテリー貸し出しシステムの
-設計資料を管理する。
-
 ## メンバー
 2442025 菊地亜由美
 
@@ -12,237 +6,186 @@ Web3層構造を用いたモバイルバッテリー貸し出しシステムの
 2442037　佐藤心優
 
 2442085　森本真理子
-Simply Bookstore Application
+# Battery Rental Web Application
 
-This is a simple bookstore application developed for personal practice.
-The project is a refactored and extended version of bookstore.py, focusing on basic Web application architecture, database design, and CRUD operations.
+This is a simple battery rental web application developed for practice purposes.
+The application is built using Python, SQLAlchemy, and PostgreSQL, and deployed using GitHub and Render.
 
-Overview
+---
 
-Application type: Bookstore management system
+## Overview
 
-Architecture: Web-based 3 Layer architecture
+This application allows users to rent batteries from stations, manage their balance, and view rental history.
+Administrators can manage users, stations, batteries, and monitor rental activity.
 
-Presentation Layer (GUI)
+---
 
-Application Layer (Python logic)
+## Functions
 
-Data Layer (Relational Database)
+### User
 
-Database type: RDB (Relational Database)
+- Login with user account  
+  `Login()` → `Home()`
 
-Main purpose: Practice of CRUD operations, database design, and system architecture
+- View account information and balance  
+  `Home()` → `UserInfo()`
 
-Functions
-User Functions
+- Rent a battery  
+  `Home()` → `RentBattery()`
 
-Login with user account
-LoginGUI() → StoreMainGUI()
+- Return a battery  
+  `RentBattery()` → `ReturnBattery()`
 
-Create a new user account
-LoginGUI()
+- Charge balance  
+  `Home()` → `ChargeBalance()`
 
-Edit user account information
-StoreMainGUI() → UserInfoGUI()
+- Logout  
+  → `Login()`
 
-Buy books
-StoreMainGUI() → BuyBooksGUI()
+---
 
-Logout
-→ LoginGUI()
+### Admin
 
-Admin Functions
+- Login with admin account  
+  `Login()` → `AdminDashboard()`
 
-Login with admin account
-LoginGUI() → AdminGUI()
+- Manage user accounts (view / edit)  
+  `AdminDashboard()` → `UserManage()`
 
-Create user accounts
-AdminGUI() → UserManageGUI(False)
+- Register and edit stations  
+  `AdminDashboard()` → `StationManage()`
 
-Edit user accounts
-AdminGUI() → UserManageGUI(True)
+- Register and edit batteries  
+  `AdminDashboard()` → `BatteryManage()`
 
-Register new books
-AdminGUI() → BookManageGUI(False)
+- View rental history  
+  `AdminDashboard()` → `RentalHistory()`
 
-Edit book information
-AdminGUI() → BookManageGUI(True)
+- Logout  
+  → `Login()`
 
-View order history
-AdminGUI() → ViewOrderGUI()
+---
 
-Logout
-→ LoginGUI()
+## File Structure
 
-File Structure
-main.py
+### main.py
+Controls the overall application flow.
+- Login
+- Authentication
+- Page routing
 
-Controls the entire application flow
+### models.py
+Defines database models using SQLAlchemy ORM.
 
-Account creation
+### db.py
+Manages database connection and session handling.
 
-Login
+### variables.py
+Stores common variables and configuration values.
 
-GUI transitions
+---
 
-Classes
+## Classes
 
-LoginGUI
+### User-related
+- User
+- Rental
+- ChargeHistory
 
-StoreMainGUI
+### Station / Battery-related
+- Station
+- Battery
 
-AdminGUI
+---
 
-Database tables used
+## Database
 
-accounts
+### Database Type
+- RDB (Relational Database)
+- PostgreSQL (Production on Render)
+- SQLite (Local development)
 
-customer.py
+ORM: SQLAlchemy
 
-Handles all user-related functions
-
-Functions
-
-Login
-
-Account creation
-
-Edit user information
-
-Buy books
-
-Logout
-
-Classes
-
-BuyBooksGUI
-
-UserInfoGUI
-
-Database tables used
-
-accounts
-
-books
-
-cards
-
-checks
-
-orders
-
-admin.py
-
-Handles all admin-related functions
-
-Functions
-
-Admin login
-
-User management
-
-Book management
-
-Order viewing
-
-Logout
-
-Classes
-
-UserManageGUI
-
-BookManageGUI
-
-ViewOrderGUI
-
-Database tables used
-
-accounts
-
-books
-
-cards
-
-checks
-
-orders
-
-variables.py
-
-Common variables and shared functions
-(Acts like a header file in C++)
-
-Database Design
-
-This application uses a Relational Database (RDB).
-ER diagram was created based on the following schema.
-
-accounts
-Column	Type	Description
-user_id	text	Primary Key
-password	text	NOT NULL
-fname	text	First name
-lname	text	Last name
-email	text	Email address
-saved_payment	int	Saved payment method
-
-saved_payment values
-
-0: None / Unsaved
-
-1: Credit / Debit Card
-
-2: Check
-
-3: Cash (on delivery)
-
-books
-Column	Type	Description
-book_id	int	Primary Key
-title	text	Book title
-author	text	Author
-publisher	text	Publisher
-price	float	Price
-available	int	Stock quantity
-sold	int	Number of sales
-orders
-Column	Type	Description
-order_id	text	Primary Key
-user_id	text	NOT NULL
-booklist	text	Purchased book list
-totalprice	float	Total price
-shipaddress	text	Shipping address
-payment	text	Payment method
-cards
-Column	Type	Description
-user_id	text	Primary Key
-name	text	Card holder name
-cardnumber	text	Card number
-exp_month	text	Expiration month
-exp_year	text	Expiration year
-bill_street	text	Billing street
-bill_city	text	Billing city
-bill_state	text	Billing state
-bill_country	text	Billing country
-bill_zip	text	ZIP code
-bill_phone	text	Phone number
-checks
-Column	Type	Description
-user_id	text	Primary Key
-name	text	Bank name
-acctype	text	Account type (Checking / Saving)
-routing	text	Routing number
-bankacc	text	Account number
-Assignment Requirements Coverage
-
-DB construction: Completed (RDB used)
-
-ER diagram: Created based on above schema
-
-CRUD operations: Fully implemented via Web/Python application
-
-3 Layer Web architecture: Applied
-
-System structure diagram: Can be derived from current architecture
-
-RPO / RTO / Backup / Performance: Can be defined based on this structure
+---
+
+## Database Tables
+
+### users
+| Column | Type | Description |
+|------|----|-----------|
+| id | INTEGER (PK) | User ID |
+| email | VARCHAR | Login email |
+| password_hash | VARCHAR | Hashed password |
+| balance_cents | INTEGER | User balance |
+| created_at | TIMESTAMP | Created time |
+
+---
+
+### stations
+| Column | Type | Description |
+|------|----|-----------|
+| id | INTEGER (PK) | Station ID |
+| name | VARCHAR | Station name |
+| location | VARCHAR | Address |
+| lat | FLOAT | Latitude |
+| lng | FLOAT | Longitude |
+
+---
+
+### batteries
+| Column | Type | Description |
+|------|----|-----------|
+| id | INTEGER (PK) | Battery ID |
+| serial | VARCHAR | Serial number |
+| station_id | INTEGER (FK) | Station reference |
+| available | BOOLEAN | Availability |
+| battery_level | INTEGER | Battery level |
+| extra_info | TEXT | Extra info |
+
+---
+
+### rentals
+| Column | Type | Description |
+|------|----|-----------|
+| id | INTEGER (PK) | Rental ID |
+| user_id | INTEGER (FK) | User reference |
+| battery_id | INTEGER (FK) | Battery reference |
+| start_at | TIMESTAMP | Start time |
+| end_at | TIMESTAMP | End time |
+| status | VARCHAR | ongoing / returned |
+| price_cents | INTEGER | Rental price |
+
+---
+
+### charge_histories
+| Column | Type | Description |
+|------|----|-----------|
+| id | INTEGER (PK) | History ID |
+| user_id | INTEGER (FK) | User reference |
+| amount_cents | INTEGER | Charged amount |
+| created_at | TIMESTAMP | Charged time |
+
+---
+
+## ER Diagram
+
+ER diagram is based on the SQLAlchemy models and reflects the actual database schema.
+
+---
+
+## Notes
+
+- Monetary values are stored as integers (cents) to avoid floating-point errors.
+- Database schema is normalized to maintain data consistency.
+- Designed for extensibility and future feature expansion.
+
+---
+
+## Environment
+
+- Python
+- SQLAlchemy
+- PostgreSQL
+- Render
+- GitHub
