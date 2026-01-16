@@ -12,85 +12,237 @@ Web3層構造を用いたモバイルバッテリー貸し出しシステムの
 2442037　佐藤心優
 
 2442085　森本真理子
+Simply Bookstore Application
 
+This is a simple bookstore application developed for personal practice.
+The project is a refactored and extended version of bookstore.py, focusing on basic Web application architecture, database design, and CRUD operations.
 
-## 内容
-- システム構成図
-- UIモック
-- ER図
-- DB設計（SQL）
+Overview
 
+Application type: Bookstore management system
 
-## UIモック
-ログイン画面
+Architecture: Web-based 3 Layer architecture
 
-メールアドレス入力
-パスワード入力
-ログインボタン
-新規登録リンク
+Presentation Layer (GUI)
 
-ホーム画面
+Application Layer (Python logic)
 
-現在地スタンド表示
-バッテリー残数
-検索ボタン
-残高表示
+Data Layer (Relational Database)
 
-スタンド検索画面
+Database type: RDB (Relational Database)
 
-一覧表示
-スタンド選択
-詳細ボタン
+Main purpose: Practice of CRUD operations, database design, and system architecture
 
-貸出確認画面
+Functions
+User Functions
 
-バッテリーID
-料金目安
-貸出ボタン
+Login with user account
+LoginGUI() → StoreMainGUI()
 
-返却画面
+Create a new user account
+LoginGUI()
 
-返却スタンド選択
-返却ボタン
+Edit user account information
+StoreMainGUI() → UserInfoGUI()
 
-利用履歴画面
+Buy books
+StoreMainGUI() → BuyBooksGUI()
 
-利用日時
-利用時間
-料金
+Logout
+→ LoginGUI()
 
-##  ER図
-erDiagram
-    USERS ||--o{ RENTALS : rents
-    BATTERIES ||--o{ RENTALS : used_in
-    STATIONS ||--o{ BATTERIES : owns
+Admin Functions
 
-    USERS {
-        int id PK
-        string email
-        string password
-        int balance
-        datetime created_at
-    }
+Login with admin account
+LoginGUI() → AdminGUI()
 
-    STATIONS {
-        int id PK
-        string name
-        string location
-    }
+Create user accounts
+AdminGUI() → UserManageGUI(False)
 
-    BATTERIES {
-        int id PK
-        int station_id FK
-        string status
-    }
+Edit user accounts
+AdminGUI() → UserManageGUI(True)
 
-    RENTALS {
-        int id PK
-        int user_id FK
-        int battery_id FK
-        datetime rent_time
-        datetime return_time
-        int fee
-    }
+Register new books
+AdminGUI() → BookManageGUI(False)
 
+Edit book information
+AdminGUI() → BookManageGUI(True)
+
+View order history
+AdminGUI() → ViewOrderGUI()
+
+Logout
+→ LoginGUI()
+
+File Structure
+main.py
+
+Controls the entire application flow
+
+Account creation
+
+Login
+
+GUI transitions
+
+Classes
+
+LoginGUI
+
+StoreMainGUI
+
+AdminGUI
+
+Database tables used
+
+accounts
+
+customer.py
+
+Handles all user-related functions
+
+Functions
+
+Login
+
+Account creation
+
+Edit user information
+
+Buy books
+
+Logout
+
+Classes
+
+BuyBooksGUI
+
+UserInfoGUI
+
+Database tables used
+
+accounts
+
+books
+
+cards
+
+checks
+
+orders
+
+admin.py
+
+Handles all admin-related functions
+
+Functions
+
+Admin login
+
+User management
+
+Book management
+
+Order viewing
+
+Logout
+
+Classes
+
+UserManageGUI
+
+BookManageGUI
+
+ViewOrderGUI
+
+Database tables used
+
+accounts
+
+books
+
+cards
+
+checks
+
+orders
+
+variables.py
+
+Common variables and shared functions
+(Acts like a header file in C++)
+
+Database Design
+
+This application uses a Relational Database (RDB).
+ER diagram was created based on the following schema.
+
+accounts
+Column	Type	Description
+user_id	text	Primary Key
+password	text	NOT NULL
+fname	text	First name
+lname	text	Last name
+email	text	Email address
+saved_payment	int	Saved payment method
+
+saved_payment values
+
+0: None / Unsaved
+
+1: Credit / Debit Card
+
+2: Check
+
+3: Cash (on delivery)
+
+books
+Column	Type	Description
+book_id	int	Primary Key
+title	text	Book title
+author	text	Author
+publisher	text	Publisher
+price	float	Price
+available	int	Stock quantity
+sold	int	Number of sales
+orders
+Column	Type	Description
+order_id	text	Primary Key
+user_id	text	NOT NULL
+booklist	text	Purchased book list
+totalprice	float	Total price
+shipaddress	text	Shipping address
+payment	text	Payment method
+cards
+Column	Type	Description
+user_id	text	Primary Key
+name	text	Card holder name
+cardnumber	text	Card number
+exp_month	text	Expiration month
+exp_year	text	Expiration year
+bill_street	text	Billing street
+bill_city	text	Billing city
+bill_state	text	Billing state
+bill_country	text	Billing country
+bill_zip	text	ZIP code
+bill_phone	text	Phone number
+checks
+Column	Type	Description
+user_id	text	Primary Key
+name	text	Bank name
+acctype	text	Account type (Checking / Saving)
+routing	text	Routing number
+bankacc	text	Account number
+Assignment Requirements Coverage
+
+DB construction: Completed (RDB used)
+
+ER diagram: Created based on above schema
+
+CRUD operations: Fully implemented via Web/Python application
+
+3 Layer Web architecture: Applied
+
+System structure diagram: Can be derived from current architecture
+
+RPO / RTO / Backup / Performance: Can be defined based on this structure
