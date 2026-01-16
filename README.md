@@ -189,3 +189,13 @@ ER diagram is based on the SQLAlchemy models and reflects the actual database sc
 - PostgreSQL
 - Render
 - GitHub
+
+## Movie
+
+https://github.com/user-attachments/assets/2ae7b7ae-a4a5-4196-941b-67e857da6777
+
+https://github.com/user-attachments/assets/1954ae10-93d5-4c09-8dc1-7e42adb817d7
+
+https://github.com/user-attachments/assets/61bd5c78-4bc6-49b2-9d12-3ca5d8a1e2c5
+
+https://github.com/user-attachments/assets/a0904815-ec8d-419c-8a17-365bc74be0aa
